@@ -146,11 +146,23 @@ class QwenLoraTrainer:
         logger.info("Starting training...")
         trainer.train()
 
-        # 모델 저장
-        trainer.save_model()
-        logger.info(
-            f"Training completed. Model saved to {self.train_config['training']['output_dir']}"
-        )
+        # 모델과 토크나이저 저장
+        output_dir = self.train_config["training"]["output_dir"]
+        logger.info(f"Saving model and tokenizer to {output_dir}")
+
+        # LoRA 모델 저장
+        self.model.save_pretrained(output_dir)
+
+        # 토크나이저 저장
+        self.tokenizer.save_pretrained(output_dir)
+
+        # 학습 설정 저장
+        with open(os.path.join(output_dir, "model_config.yml"), "w") as f:
+            yaml.dump(self.model_config, f)
+        with open(os.path.join(output_dir, "train_config.yml"), "w") as f:
+            yaml.dump(self.train_config, f)
+
+        logger.info(f"Training completed. All artifacts saved to {output_dir}")
 
 
 def main():
