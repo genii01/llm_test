@@ -1,0 +1,8 @@
+torch
+transformers
+peft
+datasets
+accelerate
+python-dotenv
+pyyaml
+huggingface_hub 
